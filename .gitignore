@@ -1,0 +1,6 @@
+build/
+*.exe
+*.o
+data/*.csv
+third_party/httplib.h
+third_party/json.hpp

@@ -9,6 +9,9 @@
 //   pushFront, pushBack, popFront, popBack, peekFront, peekBack, size, empty : O(1)
 //   removeFirstIf, toVector, clear                                           : O(n)
 // Độ phức tạp bộ nhớ: O(n), mỗi phần tử một nút cấp phát riêng.
+//
+// Cách dùng trong hàng chờ vé: khách VIP -> pushFront (vào đầu hàng), khách thường -> pushBack
+// (vào cuối hàng), cấp ghế cho người ở đầu hàng bằng popFront.
 #pragma once
 #include <cstddef>
 #include <functional>

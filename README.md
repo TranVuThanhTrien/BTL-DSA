@@ -1,33 +1,57 @@
-# Quầy vé xem phim và hàng chờ (ĐT19)
+# CineQ - hệ thống bán vé xem phim (BTL DSA)
 
-Hệ thống đặt vé xem phim bằng C++. Hàng chờ khi hết ghế dùng Deque tự cài bằng danh sách
-liên kết đôi (không dùng std::deque). Giao diện web nói chuyện với server C++ qua API.
+Backend C++17 (REST API) + giao diện web HTML/CSS/JavaScript thuần. Hàng chờ ghế dùng **Deque tự cài** (danh sách liên kết đôi, không dùng `std::deque`). Dữ liệu lưu CSV trong `data/`.
 
-## Build và chạy
-Bản console (không cần thư viện ngoài):
+## Chạy
+Cần CMake 3.14+ và trình biên dịch C++17.
+```
+cmake -S . -B build
+cmake --build build
+ctest --test-dir build        # 7 nhóm kiểm thử
+./build/server 8080           # rồi mở http://localhost:8080
+```
+Chạy từ thư mục gốc dự án (server đọc `./web` và `./data`). Windows MinGW: `cmake -S . -B build -G "MinGW Makefiles"`, chạy `.\build\server.exe 8080`. Terminal tiếng Việt: `chcp 65001`.
+Lần chạy đầu tự tạo dữ liệu mẫu: 6 phim, 3 phòng, các suất trong 4 ngày tới. Muốn tạo lại, tắt server và xóa mọi file trong `data/` (kể cả thư mục `data/shows`).
 
-    g++ -std=c++17 -Isrc src/console/main_console.cpp src/core/*.cpp src/storage/*.cpp -o console
-    ./console
+## Tài khoản
+| Tên đăng nhập | Mật khẩu | Vai trò |
+|---|---|---|
+| khach | khach123 | Khách hàng |
+| admin | admin123 | Quản trị / nhân viên quầy |
 
-Bản web (cần third_party/httplib.h và third_party/json.hpp):
+Khách chưa đăng nhập vẫn xem phim, lịch chiếu, sơ đồ ghế, tin tức; chỉ phải đăng nhập khi bấm giữ ghế.
 
-    g++ -std=c++17 -Isrc src/server/main_server.cpp src/core/*.cpp src/storage/*.cpp -o server -pthread
-    ./server          # mở http://localhost:8080
+## Nghiệp vụ
+- Nhiều phim, nhiều phòng, nhiều suất; mỗi suất có sơ đồ ghế, giá thường/VIP riêng và một Deque hàng chờ riêng.
+- Chọn nhiều ghế (tối đa 8 mỗi đơn) hoặc "Chọn ghế liền kề" (ưu tiên liền hàng, gần giữa phòng).
+- Giữ ghế 10 phút khi chưa thanh toán; hết hạn tự nhả ghế và giao cho người đầu hàng chờ.
+- Bắp nước, mã giảm giá (CINE10, HSSV15, VUIVE20), xác nhận độ tuổi với phim T13/T16/T18.
+- Thanh toán: chuyển khoản QR, ví, thẻ (mô phỏng, không thu tiền thật); tiền mặt tại quầy dành cho admin, có tính tiền thối.
+- Vé điện tử có mã QR, in được.
+- Ngừng bán trước giờ chiếu 10 phút. Khách tự hủy vé đã thanh toán trước giờ chiếu ít nhất 2 tiếng, hoàn 80%; admin hủy được mọi lúc trước khi soát vé.
+- Hết ghế một loại: vào danh sách chờ. VIP chen lên đầu hàng (`pushFront`), khách thường vào cuối (`pushBack`). Có ghế trống thì giao cho người đầu tiên cần đúng loại ghế (`removeFirstIf` lấy giữa hàng) và giữ 10 phút để thanh toán.
+- Soát vé theo mã đơn (mở trước giờ chiếu 60 phút, mỗi vé chỉ dùng một lần).
+- Admin: báo cáo doanh thu theo phim, bắp nước, mức lấp đầy từng suất; quản lý phim và suất; đăng tin; xuất đơn hàng ra CSV; đặt lại dữ liệu bán vé.
+- Tên người trong hàng chờ bị che với khách khác.
 
-Trên Windows (MinGW) thêm -lws2_32 khi biên dịch server. Hoặc dùng CMake:
+## Cấu trúc
+```
+src/core/     Deque.h, SeatMap, BookingService (hàng chờ), Types.h
+src/box/      BoxOffice: phim, suất, đơn hàng, giữ ghế, thanh toán, hủy, soát vé, thống kê
+src/storage/  Storage (CSV), Ticketing
+src/server/   main_server.cpp (REST API), Auth, News, Sha256
+src/console/  bản dòng lệnh một suất chiếu, dữ liệu riêng, dùng khi web lỗi
+tests/        Deque, SeatMap, Booking, Storage, Auth, News, Box
+web/          index.html, style.css, app.js, qrcode.js (MIT, thư viện tạo QR)
+third_party/  cpp-httplib, nlohmann/json
+```
 
-    cmake -S . -B build && cmake --build build && ctest --test-dir build
+## API
+Token đăng nhập gửi trong header `X-Token`.
+GET `/api/catalog` `/api/shows?movie=` `/api/show?id=` `/api/news` `/api/me` `/api/orders` `/api/stats`
+POST `/api/quote` `/api/register` `/api/login` `/api/logout` `/api/orders` `/api/orders/pay` `/api/orders/cancel` `/api/queue/join` `/api/queue/leave` `/api/checkin` `/api/movies/save|delete` `/api/showtimes/save|delete` `/api/news/create|update|delete` `/api/reset`
 
-## Thành viên và module
-| Người | Module |
-|---|---|
-| A | Deque, API server |
-| B | Sơ đồ ghế, tìm chỗ trống |
-| C | Điều phối vé, hủy vé, hàng chờ |
-| D | Lưu file, thanh toán, xuất vé, console |
-| E | Giao diện web |
+## Giới hạn
+Thanh toán là mô phỏng. Mật khẩu băm SHA-256 + salt (đủ cho bài tập). Token phiên giữ trong bộ nhớ nên khởi động lại server phải đăng nhập lại. Mã khuyến mãi và combo nằm cố định trong code.
 
-<!-- TODO (D): mô tả đề tài, ảnh chụp màn hình, giải thích định dạng file dữ liệu -->
-<!-- TODO (D): mục "Đóng gói và phát hành": cách tạo thư mục phát hành (server.exe + web/ + data/), nén zip;
-     cách mở trên điện thoại (cùng Wi-Fi, http://<IP máy>:cổng, chọn "Thêm vào màn hình chính");
-     cảnh báo Windows SmartScreen vì file chưa ký số (bấm "Thông tin thêm" rồi "Vẫn chạy") -->
+

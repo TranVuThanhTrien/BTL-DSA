@@ -126,3 +126,4 @@ std::string SeatMap::render() const {
 std::string SeatMap::seatName(int r, int c) {
     return std::string(1, static_cast<char>('A' + r)) + std::to_string(c + 1);
 }
+

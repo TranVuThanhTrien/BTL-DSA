@@ -38,3 +38,4 @@ private:
     int vipRows_;
     std::vector<std::vector<bool>> taken_;
 };
+

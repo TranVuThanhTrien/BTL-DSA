@@ -255,3 +255,5 @@ int main() {
     RUN(catalog_validation);
     TEST_MAIN_END();
 }
+
+

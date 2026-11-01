@@ -72,3 +72,5 @@ int main() {
     RUN(remove_ends_and_missing);
     TEST_MAIN_END();
 }
+
+

@@ -21,3 +21,5 @@ static int g_failed = 0;
     } while (0)
 
 #define TEST_MAIN_END() return g_failed == 0 ? 0 : 1
+
+

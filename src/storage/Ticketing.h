@@ -24,3 +24,5 @@ std::string ticketText(const Ticket& ticket, const std::string& movieTitle, cons
 // Ghi vé ra file. Ném StorageError nếu không ghi được.
 void writeTicketFile(const std::string& path, const Ticket& ticket, const std::string& movieTitle,
                      const std::string& showTime, const std::string& room);
+
+

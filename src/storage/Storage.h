@@ -35,3 +35,5 @@ std::string csvQuote(const std::string& field);
 std::vector<std::string> csvSplit(const std::string& line);
 void writeFileAtomic(const std::string& path, const std::string& content);
 std::vector<std::string> readLines(const std::string& path, bool* existed = nullptr);
+
+

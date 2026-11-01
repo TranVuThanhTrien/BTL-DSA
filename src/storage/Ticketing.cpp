@@ -55,3 +55,5 @@ void writeTicketFile(const std::string& path, const Ticket& t, const std::string
                      const std::string& showTime, const std::string& room) {
     writeFileAtomic(path, ticketText(t, movie, showTime, room));
 }
+
+

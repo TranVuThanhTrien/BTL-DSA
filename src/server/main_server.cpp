@@ -7,6 +7,7 @@
 //   Công khai: GET /api/catalog /api/shows?movie= /api/show?id= /api/news?cat= /api/me
 //              POST /api/quote /api/register /api/login /api/logout
 //   Đăng nhập: POST /api/orders /api/orders/pay /api/orders/cancel /api/queue/join /api/queue/leave ; GET /api/orders
+//   Chạy: ./build/server 8080 (từ thư mục gốc; đọc ./web và ./data, tự tạo dữ liệu mẫu lần đầu)
 //   Quản trị:  POST /api/checkin /api/movies/save|delete /api/showtimes/save|delete /api/news/create|update|delete /api/reset ; GET /api/stats
 #include <algorithm>
 #include <ctime>

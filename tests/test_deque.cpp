@@ -62,6 +62,18 @@ static void remove_ends_and_missing() {
     CHECK((d.toVector() == std::vector<int>{2}));
 }
 
+static void peek_and_clear() {
+    Deque<int> d;
+    d.pushBack(1);
+    d.pushBack(2);
+    CHECK(d.peekFront() == 1);
+    CHECK(d.peekBack() == 2);
+    d.clear();
+    CHECK(d.empty());
+    d.pushFront(9);
+    CHECK((d.toVector() == std::vector<int>{9}));
+}
+
 int main() {
     RUN(empty_at_start);
     RUN(push_order);
@@ -70,6 +82,7 @@ int main() {
     RUN(empty_throws);
     RUN(remove_middle);
     RUN(remove_ends_and_missing);
+    RUN(peek_and_clear);
     TEST_MAIN_END();
 }
 

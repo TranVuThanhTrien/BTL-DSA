@@ -5,14 +5,19 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 if(NOT MSVC)
   add_compile_options(-Wall -Wextra)
+else()
+  add_compile_options(/utf-8)
 endif()
 
-# Phần lõi và lưu trữ: không phụ thuộc thư viện web
+# Phần lõi, lưu trữ, tài khoản, tin tức: không phụ thuộc thư viện web
 add_library(core
   src/core/SeatMap.cpp
   src/core/BookingService.cpp
   src/storage/Storage.cpp
-  src/storage/Ticketing.cpp)
+  src/storage/Ticketing.cpp
+  src/box/BoxOffice.cpp
+  src/server/Auth.cpp
+  src/server/News.cpp)
 target_include_directories(core PUBLIC src)
 
 add_executable(console src/console/main_console.cpp)
@@ -29,14 +34,9 @@ if(EXISTS ${CMAKE_SOURCE_DIR}/third_party/httplib.h)
   endif()
 endif()
 
-# TODO (A, đóng gói): bản phát hành cho người dùng tải về
-#   - link tĩnh để máy khác không cần DLL: target_link_options(server PRIVATE -static)
-#   - Windows: ẩn cửa sổ console bằng -mwindows (chỉ khi app đã có cách thoát, ví dụ nút Thoát trên giao diện)
-#   - copy thư mục web/ cạnh file chạy: add_custom_command(... COMMAND ${CMAKE_COMMAND} -E copy_directory ...)
-
-# Kiểm thử: chạy bằng "ctest" trong thư mục build
+# Kiểm thử: chạy "ctest --test-dir build --output-on-failure"
 enable_testing()
-foreach(t deque seatmap booking storage)
+foreach(t deque seatmap booking storage auth news box)
   add_executable(test_${t} tests/test_${t}.cpp)
   target_link_libraries(test_${t} core)
   add_test(NAME ${t} COMMAND test_${t})

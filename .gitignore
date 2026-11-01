@@ -1,6 +1,7 @@
 build/
+data/
 *.exe
 *.o
-data/*.csv
-third_party/httplib.h
-third_party/json.hpp
+.vscode/
+.idea/
+tickets_out/

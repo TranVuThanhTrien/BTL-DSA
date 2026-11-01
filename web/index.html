@@ -3,49 +3,16 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Quầy Vé Xem Phim</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800&family=IBM+Plex+Sans:wght@400;600&display=swap">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="style.css">
-  <!-- TODO (E, đóng gói): PWA cho điện thoại: thêm <link rel="manifest" href="manifest.json"> và <meta name="theme-color">;
-       làm icon 192x192 và 512x512 trong web/icons/ rồi khai báo trong manifest.json -->
-  <!-- TODO (E, đóng gói): bản tải về phải chạy được khi không có mạng. Tailwind CDN và Google Fonts ở trên cần Internet;
-       thay bằng CSS viết tay trong style.css và font hệ thống (hoặc tải sẵn tệp font vào web/fonts/) -->
+  <title>CineQ - Đặt vé xem phim</title>
+  <link rel="stylesheet" href="style.css?v=5">
 </head>
-<body class="bg-slate-100 text-slate-900">
-  <main class="mx-auto max-w-5xl px-4 py-6">
-    <h1 class="title">Quầy Vé Xem Phim</h1>
-
-    <div class="grid gap-6 md:grid-cols-[1fr_320px] mt-6">
-      <section class="card">
-        <h2 class="h2">Sơ đồ ghế</h2>
-        <div class="legend" id="legend"></div>
-        <div class="screen">MÀN HÌNH</div>
-        <div id="seat-grid" class="seat-grid"></div>
-      </section>
-
-      <section class="card">
-        <h2 class="h2">Đặt vé</h2>
-        <label for="name">Họ tên</label>
-        <input id="name" class="input" maxlength="40" autocomplete="off">
-        <label for="type">Loại vé</label>
-        <select id="type" class="input">
-          <option value="NORMAL">Thường - 80.000 ₫</option>
-          <option value="VIP">VIP - 120.000 ₫</option>
-        </select>
-        <button id="btn-book" class="btn-primary">Đặt vé</button>
-        <!-- TODO (E): khung thanh toán, danh sách vé vừa đặt, nút hủy vé -->
-      </section>
-    </div>
-
-    <section class="card mt-6">
-      <h2 class="h2">Hàng chờ</h2>
-      <div id="queue" class="queue"></div>
-    </section>
-  </main>
-
+<body>
+  <div id="app"></div>
+  <div id="modal-root"></div>
   <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
-  <script src="app.js"></script>
+  <noscript><p style="padding:16px">Trang này cần bật JavaScript.</p></noscript>
+  <script src="qrcode.js"></script>
+  <script src="app.js?v=5"></script>
 </body>
 </html>
+

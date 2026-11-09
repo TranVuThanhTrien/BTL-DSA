@@ -275,10 +275,14 @@ textarea.in{min-height:120px;resize:vertical}
 .arrow{align-self:center;padding:0 8px;color:var(--muted);font:500 18px var(--mono);margin-top:26px}
 
 /* Bắp nước, mã giảm giá, thanh toán */
-.combo{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:6px 16px;align-items:center;padding:14px 0;border-top:1px solid var(--line)}
-.combo:first-of-type{border-top:0}
-.combo b{font-weight:600}
-.combo .p{font:600 14px var(--mono)}
+.combo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin-top:14px}
+.combo-card{display:grid;grid-template-columns:112px minmax(0,1fr);gap:12px;align-items:center;padding:12px;border:1px solid var(--line);border-radius:14px;background:var(--surface-2)}
+.combo-art{display:block;width:100%;height:90px;object-fit:cover;border-radius:10px;background:var(--surface)}
+.combo-info{display:grid;gap:9px;min-width:0}
+.combo-info b{font-weight:650;line-height:1.35}
+.combo-info .p{font:600 14px var(--mono);color:var(--accent)}
+.combo-info .qty{justify-self:start}
+@media(max-width:480px){.combo-card{grid-template-columns:92px minmax(0,1fr);gap:9px;padding:9px}}
 .promo{display:flex;gap:8px;margin-top:6px}
 .methods{display:grid;gap:10px}
 .method{display:grid;grid-template-columns:22px minmax(0,1fr) auto;gap:12px;align-items:center;padding:14px;border:1.5px solid var(--line);border-radius:12px;cursor:pointer;background:var(--surface)}

@@ -299,6 +299,13 @@ function notFound() {
 /* ---------- đặt vé: chọn ghế, bắp nước ---------- */
 const comboName = id => (S.cat.combos.find(c => c.id === id) || {}).name || id;
 const comboPrice = id => (S.cat.combos.find(c => c.id === id) || {}).price || 0;
+const comboPhotos = {
+  BAP: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAqMnW2WEwy4-JbCI7Oua99gynxj_Donlbc9xN5BSGYA7WiyWo9VqlVduk&s=10',
+  BAPPM: 'https://cellphones.com.vn/sforum/wp-content/uploads/2023/07/gia-bap-nuoc-cgv-1.jpg',
+  NUOC: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTxn5OOo-hnetOplbz5Z_ZJ4DnTttILmfu9UA_c9ZVGyh6lWoAB_lc8Km_m&s=10',
+  C1: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlXcSps0E_w_on5gKc5Qie4W1V1giahZyZfBD2baV1uMAYWS0i72aGd3EL&s=10',
+  C2: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHrgP84pnGJyYcECnCG0mtHbxgkQYrhMkiPOr1zU7cLIDjjLmcvrwt65fr&s=10'
+};
 const selKey = (r, c) => r + ',' + c;
 const isSel = (r, c) => B.sel.some(p => p.row === r && p.col === c);
 const steps = n => `<div class="steps">${['Chọn ghế', 'Bắp nước và ưu đãi', 'Thanh toán'].map((l, i) =>
@@ -353,8 +360,8 @@ function stepSeats() {
 function stepExtras() {
   const m = movieOf(B.data.show.movieId), age = m && AGE[m.rating];
   return `<div class="card"><h3 style="font-size:24px;margin-bottom:6px">Bắp nước</h3>
-    ${S.cat.combos.map(c => `<div class="combo"><b>${esc(c.name)}</b><span class="p">${money(c.price)}</span>
-      <div class="qty"><button data-act="combo" data-id="${esc(c.id)}" data-d="-1" aria-label="Giảm">−</button><output>${B.combos[c.id] || 0}</output><button data-act="combo" data-id="${esc(c.id)}" data-d="1" aria-label="Tăng">+</button></div></div>`).join('')}</div>
+    <div class="combo-grid">${S.cat.combos.map(c => `<div class="combo-card"><img class="combo-art" src="${esc(comboPhotos[c.id] || comboPhotos.C1)}" alt="${esc(c.name)}" loading="lazy"><div class="combo-info"><b>${esc(c.name)}</b><span class="p">${money(c.price)}</span>
+      <div class="qty"><button data-act="combo" data-id="${esc(c.id)}" data-d="-1" aria-label="Giảm">−</button><output>${B.combos[c.id] || 0}</output><button data-act="combo" data-id="${esc(c.id)}" data-d="1" aria-label="Tăng">+</button></div></div></div>`).join('')}</div></div>
     <div class="card"><h3 style="font-size:24px;margin-bottom:12px">Mã giảm giá</h3>
       ${B.promoOk ? `<div class="alert ok"><span><b>${esc(B.promoOk)}</b> · ${esc(B.quote && B.quote.promoNote || '')}</span><button class="btn sm" data-act="promoClear">Bỏ mã</button></div>`
         : `<div class="promo"><input class="in" id="promo" placeholder="Nhập mã" value="${esc(B.promoText)}" data-in="promo" autocomplete="off"><button class="btn" data-act="promo">Áp dụng</button></div><div class="err" id="promo-err">${esc(B.promoErr)}</div>
@@ -869,4 +876,3 @@ setInterval(() => {
 document.documentElement.dataset.theme = store.get('cq_theme') || 'dark';
 S.token = store.get('cq_token');
 route();
-
